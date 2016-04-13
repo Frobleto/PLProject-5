@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_listcomprehension" default="compile.module.listcomprehension">
+  <dirname property="module.listcomprehension.basedir" file="${ant.file.module_listcomprehension}"/>
+  
+  <property name="module.jdk.home.listcomprehension" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.listcomprehension" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.listcomprehension" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.listcomprehension" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  
+  <property name="listcomprehension.output.dir" value="${module.listcomprehension.basedir}/../../../out/production/ListComprehension"/>
+  <property name="listcomprehension.testoutput.dir" value="${module.listcomprehension.basedir}/../../../out/test/ListComprehension"/>
+  
+  <path id="listcomprehension.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="listcomprehension.module.production.classpath">
+    <path refid="${module.jdk.classpath.listcomprehension}"/>
+  </path>
+  
+  <path id="listcomprehension.runtime.production.module.classpath">
+    <pathelement location="${listcomprehension.output.dir}"/>
+  </path>
+  
+  <path id="listcomprehension.module.classpath">
+    <path refid="${module.jdk.classpath.listcomprehension}"/>
+    <pathelement location="${listcomprehension.output.dir}"/>
+  </path>
+  
+  <path id="listcomprehension.runtime.module.classpath">
+    <pathelement location="${listcomprehension.testoutput.dir}"/>
+    <pathelement location="${listcomprehension.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.listcomprehension">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.listcomprehension">
+    <patternset refid="excluded.from.module.listcomprehension"/>
+  </patternset>
+  
+  <path id="listcomprehension.module.sourcepath">
+    <dirset dir="${module.listcomprehension.basedir}">
+      <include name="robleto"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.listcomprehension" depends="compile.module.listcomprehension.production,compile.module.listcomprehension.tests" description="Compile module ListComprehension"/>
+  
+  <target name="compile.module.listcomprehension.production" depends="register.custom.compilers" description="Compile module ListComprehension; production classes">
+    <mkdir dir="${listcomprehension.output.dir}"/>
+    <javac2 destdir="${listcomprehension.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.listcomprehension}/javac">
+      <compilerarg line="${compiler.args.listcomprehension}"/>
+      <bootclasspath refid="listcomprehension.module.bootclasspath"/>
+      <classpath refid="listcomprehension.module.production.classpath"/>
+      <src refid="listcomprehension.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.listcomprehension"/>
+    </javac2>
+    
+    <copy todir="${listcomprehension.output.dir}">
+      <fileset dir="${module.listcomprehension.basedir}/robleto">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.listcomprehension.tests" depends="register.custom.compilers,compile.module.listcomprehension.production" description="compile module ListComprehension; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.listcomprehension" description="cleanup module">
+    <delete dir="${listcomprehension.output.dir}"/>
+    <delete dir="${listcomprehension.testoutput.dir}"/>
+  </target>
+</project>
