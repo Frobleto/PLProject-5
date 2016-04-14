@@ -1,19 +1,11 @@
-""" This will parse the data from the unix command echo "Header1 is this~Header2 and that~~Data 1.0~Data 2.0" | tr "~" "\n"
-which is:
-Header1 is this
-Header2 and that
-
-Data 1.0
-Data 2.0
-"""
-
-tokens = ('HEADER1', 'HEADER2', 'DATA', 'INTEGER')
-literals = ['.',  ]
+tokens = ('HEADER','WORD','QUOTE','COMMA','INTEGER')
+literals = ['"']
 
 # Tokens
-t_HEADER1  = r'^Header1[ -~]+$'
-t_HEADER2  = r'^Header2.*$'
-t_DATA     = r'Data'
+t_HEADER = r'^Season,Episode,Character,Line$'
+t_WORD   = r'\b[a-zA-Z0-9]+\b'
+t_QUOTE  = r'\".*$'
+t_COMMA  = r','
 
 def t_INTEGER(t):
     r'\d+'
@@ -45,16 +37,30 @@ global time_step
 time_step = 0
 
 def p_start(t):
-    '''start : HEADER1
-             | HEADER2
-             | DATA float
+    '''start : HEADER
+             | speaker
+             | episode
+             | quote
+             | empty
     '''
-    if len(t) > 2: #This matches the third line in the parser rule, i.e., | DATA float
-        print "Saw a ", t[0], ", ", t[1], ", ", t[2], "_~_"
+    print 'Saw: ' + str(t[1])
 
-def p_float(t):
-    'float : INTEGER "." INTEGER'
-    t[0] =  str(t[1]) + str(t[2]) + str(t[3])
+def p_episode(t):
+    'episode : INTEGER COMMA INTEGER'
+    print 'Season: ' + str(t[1]) + ' Episode: ' + str(t[3])
+
+def p_speaker(t):
+    'speaker : COMMA WORD COMMA'
+    print "WORKS"
+    print str(t[1]) + ': '
+
+def p_quote(t):
+    'quote : QUOTE'
+    print str(t[1]) + '"'
+
+def p_empty(t):
+    'empty : '
+    pass
 
 def p_error(t):
     if t == None:
@@ -72,4 +78,5 @@ while True:
         break
     parser.parse(s)
 
-# To run the parser do the following in a terminal window: echo "Header1 is this~Header2 and that~~Data 1.0~Data 2.0" | tr "~" "\n" | grep -v '^\s*$' | python PLYstarter.py | sed "s/_~_/ which is a float./"
+# To run the parser, enter the following in a terminal window:
+#    cat SouthParkS13E01.out | python PLYsouthpark.py

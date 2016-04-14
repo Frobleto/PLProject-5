@@ -1,0 +1,148 @@
+Created by PLY version 3.8 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> start
+Rule 1     start -> HEADER
+Rule 2     start -> speaker
+Rule 3     start -> episode
+Rule 4     start -> quote
+Rule 5     start -> empty
+Rule 6     episode -> INTEGER COMMA INTEGER
+Rule 7     speaker -> COMMA WORD COMMA
+Rule 8     quote -> QUOTE
+Rule 9     empty -> <empty>
+
+Terminals, with rules where they appear
+
+COMMA                : 6 7 7
+HEADER               : 1
+INTEGER              : 6 6
+QUOTE                : 8
+WORD                 : 7
+error                : 
+
+Nonterminals, with rules where they appear
+
+empty                : 5
+episode              : 3
+quote                : 4
+speaker              : 2
+start                : 0
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . start
+    (1) start -> . HEADER
+    (2) start -> . speaker
+    (3) start -> . episode
+    (4) start -> . quote
+    (5) start -> . empty
+    (7) speaker -> . COMMA WORD COMMA
+    (6) episode -> . INTEGER COMMA INTEGER
+    (8) quote -> . QUOTE
+    (9) empty -> .
+
+    HEADER          shift and go to state 2
+    COMMA           shift and go to state 7
+    INTEGER         shift and go to state 8
+    QUOTE           shift and go to state 6
+    $end            reduce using rule 9 (empty -> .)
+
+    start                          shift and go to state 4
+    speaker                        shift and go to state 5
+    episode                        shift and go to state 1
+    empty                          shift and go to state 9
+    quote                          shift and go to state 3
+
+state 1
+
+    (3) start -> episode .
+
+    $end            reduce using rule 3 (start -> episode .)
+
+
+state 2
+
+    (1) start -> HEADER .
+
+    $end            reduce using rule 1 (start -> HEADER .)
+
+
+state 3
+
+    (4) start -> quote .
+
+    $end            reduce using rule 4 (start -> quote .)
+
+
+state 4
+
+    (0) S' -> start .
+
+
+
+state 5
+
+    (2) start -> speaker .
+
+    $end            reduce using rule 2 (start -> speaker .)
+
+
+state 6
+
+    (8) quote -> QUOTE .
+
+    $end            reduce using rule 8 (quote -> QUOTE .)
+
+
+state 7
+
+    (7) speaker -> COMMA . WORD COMMA
+
+    WORD            shift and go to state 10
+
+
+state 8
+
+    (6) episode -> INTEGER . COMMA INTEGER
+
+    COMMA           shift and go to state 11
+
+
+state 9
+
+    (5) start -> empty .
+
+    $end            reduce using rule 5 (start -> empty .)
+
+
+state 10
+
+    (7) speaker -> COMMA WORD . COMMA
+
+    COMMA           shift and go to state 12
+
+
+state 11
+
+    (6) episode -> INTEGER COMMA . INTEGER
+
+    INTEGER         shift and go to state 13
+
+
+state 12
+
+    (7) speaker -> COMMA WORD COMMA .
+
+    $end            reduce using rule 7 (speaker -> COMMA WORD COMMA .)
+
+
+state 13
+
+    (6) episode -> INTEGER COMMA INTEGER .
+
+    $end            reduce using rule 6 (episode -> INTEGER COMMA INTEGER .)
+
